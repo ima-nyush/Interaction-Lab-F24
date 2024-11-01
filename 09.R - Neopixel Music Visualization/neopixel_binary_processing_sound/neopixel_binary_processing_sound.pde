@@ -10,6 +10,8 @@ color[] leds = new color[NUM_LEDS];  // array of one color for each pixel
 void setup() {
   size(900, 600);
   frameRate(30);
+  colorMode(HSB,255);                //Set the color mode to Hue, Saturation, Brightness
+
 
   printArray(Serial.list());
   // put the name of the serial port your Arduino is connected
@@ -35,7 +37,7 @@ void draw() {
 
   for (int i=0; i < NUM_LEDS; i++) {   // loop through each pixel in the strip
     if (i < progress * NUM_LEDS) {     // based on where we are in the song
-      leds[i] = color(255, 0, 0);      // turn a pixel to red
+      leds[i] = color(0, 255, 127);      // turn a pixel to red
     } else {
       leds[i] = color(0, 0, 0);        // or to black
     }
@@ -63,12 +65,12 @@ void draw() {
 void sendColors() {
   byte[] out = new byte[NUM_LEDS*3];
   for (int i=0; i < NUM_LEDS; i++) {
-    out[i*3]   = (byte)(floor(red(leds[i])) >> 1);
+    out[i*3]   = (byte)(floor(hue(leds[i])) >> 1);
     if (i == 0) {
       out[0] |= 1 << 7;
     }
-    out[i*3+1] = (byte)(floor(green(leds[i])) >> 1);
-    out[i*3+2] = (byte)(floor(blue(leds[i])) >> 1);
+    out[i*3+1] = (byte)(floor(saturation(leds[i])) >> 1);
+    out[i*3+2] = (byte)(floor(brightness(leds[i])) >> 1);
   }
   serialPort.write(out);
 }
