@@ -14,7 +14,7 @@
 CRGB leds[NUM_LEDS];
 int next_led = 0;    // 0..NUM_LEDS-1
 byte next_col = 0;   // 0..2
-byte next_rgb[3];    // temporary storage for next color
+byte next_val[3];    // temporary storage for next HSV value
 
 void setup() {
   Serial.begin(115200);
@@ -35,11 +35,11 @@ void loop() {
       next_led = 0;
       next_col = 0;
     }
-    if (next_led < NUM_LEDS) {
-      next_rgb[next_col] = in << 1;
+  if (next_led < NUM_LEDS) {
+      next_val[next_col] = in << 1;
       next_col++;
       if (next_col == 3) {
-        leds[next_led] = CRGB(next_rgb[0], next_rgb[1], next_rgb[2]);
+        leds[next_led] = CHSV(next_val[0], next_val[1], next_val[2]);
         next_led++;
         next_col = 0;
       }
